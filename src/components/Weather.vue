@@ -18,7 +18,7 @@
 </template>
 
 <script setup>
-import { getAdcode, getWeather, getOtherWeather, getIpInfo } from "@/api";
+import { getAdcode, getOtherWeather, getWeather } from "@/api";
 import { Error } from "@icon-park/vue-next";
 
 // 高德开发者 Key
