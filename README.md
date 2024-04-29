@@ -13,7 +13,7 @@
 
 >由于 CDN 缓存原因，查看最新效果可能需要 `Ctrl` + `F5` 强制刷新浏览器缓存
 
-- [無名の主页](https://www.dakkk.top)
+- [Dakkkの主页](https://www.dakkk.top)
 
 
 ### 功能
@@ -29,15 +29,15 @@
 
 ### 自动部署
 
-如果遇到构建环境或者打包过程出现错误，则可以采用 `Github Actions` 来进行自动构建
+如果遇到构建环境或者打包过程出现错误，则可以采用 `Github Actions` 来进行自动构建你好呀
 
 - 在成功 `fork` 仓库后，前往 `Actions` 页面，若您是首次开启，则会出现下面的提示，点击开启
   
-  ![步骤1](/screenshots/step1.jpg)
+  ![](https://my-obsidian-image.oss-cn-guangzhou.aliyuncs.com/2024/04/2b2f63a23ecaef5848ede1aec870069d.jpg)
 
 - 然后在仓库中进行任意修改后均会触发工作流的运行，在工作流完成后，会在下方生成一个可供下载的压缩包，这就是构建出的静态文件，可自行上传至服务器
   
-  ![步骤2](/screenshots/step2.jpg)
+  ![](https://my-obsidian-image.oss-cn-guangzhou.aliyuncs.com/2024/04/bfd0f19ae70769889692c8faf1e37773.jpg)
 
 ### 手动部署
 
