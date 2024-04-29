@@ -30,7 +30,10 @@
               <Icon size="26">
                 <component :is="siteIcon[item.icon]" />
               </Icon>
-              <span class="name text-hidden">{{ item.name }}</span>
+              <el-tooltip placement="top">
+                <template #content> {{ item.name }} </template>
+                <span class="name text-hidden">{{ item.name }}</span>
+              </el-tooltip>
             </div>
           </el-col>
         </el-row>
@@ -43,7 +46,7 @@
 <script setup>
 import { Icon } from "@vicons/utils";
 // 可前往 https://www.xicons.org 自行挑选并在此处引入
-import { Link, Blog, CompactDisc, Cloud, Compass, Book, Fire, LaptopCode } from "@vicons/fa"; // 注意使用正确的类别
+import { Link, Blog, CompactDisc, Fire, UserFriends,Connectdevelop,Rainbow} from "@vicons/fa"; // 注意使用正确的类别
 import { mainStore } from "@/store";
 import { Swiper, SwiperSlide } from "swiper/vue";
 import { Pagination, Mousewheel } from "swiper";
@@ -64,12 +67,11 @@ const siteLinksList = computed(() => {
 // 网站链接图标
 const siteIcon = {
   Blog,
-  Cloud,
   CompactDisc,
-  Compass,
-  Book,
   Fire,
-  LaptopCode,
+  UserFriends,
+  Connectdevelop,
+  Rainbow,
 };
 
 // 链接跳转
@@ -77,12 +79,24 @@ const jumpLink = (data) => {
   if (data.name === "音乐" && store.musicClick) {
     if (typeof $openList === "function") $openList();
   } else {
-    window.open(data.link, "_blank");
+    if (data.link===""){
+      ElMessage({
+        dangerouslyUseHTMLString: true,
+        message: `<strong>还在开发中嗷 ┗|｀O′|┛  ~~</strong>`,
+      });
+    }else if(data.name === "敬请期待"){
+      ElMessage({
+        dangerouslyUseHTMLString: true,
+        message: `<strong>后续开发更多项目哈，敬请期待</strong>`,
+      });
+    } else{
+      window.open(data.link, "_blank");
+    }
   }
 };
 
 onMounted(() => {
-  console.log(siteLinks);
+  // console.log(siteLinks);
 });
 </script>
 

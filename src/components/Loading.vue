@@ -6,7 +6,7 @@
         <span class="name">
           {{ siteName }}
         </span>
-        <span class="tip"> 加载中 </span>
+        <span class="tip"> 💫加速准备中，请耐心等候💫 </span>
       </div>
     </div>
     <div class="loader-section section-left" />

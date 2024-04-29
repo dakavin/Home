@@ -72,7 +72,6 @@ const getWeatherData = async () => {
     } else {
       // 获取 Adcode
       const adCodeGetByID = await getAdcode(mainKey);
-      console.log(adCodeGetByID);
       if (adCodeGetByID.infocode !== "10000") {
         throw "地区查询失败";
       }
