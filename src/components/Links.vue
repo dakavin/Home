@@ -27,13 +27,22 @@
               :style="index < 3 ? 'margin-bottom: 20px' : null"
               @click="jumpLink(item)"
             >
+              <!--<Icon size="26">-->
+              <!--  <component :is="siteIcon[item.icon]" />-->
+              <!--</Icon>-->
+              <!--<el-tooltip placement="top">-->
+              <!--  <template #content> {{ item.name }} </template>-->
+              <!--  <span class="name text-hidden">{{ item.name }}</span>-->
+              <!--</el-tooltip>-->
               <Icon size="26">
                 <component :is="siteIcon[item.icon]" />
               </Icon>
-              <el-tooltip placement="top">
-                <template #content> {{ item.name }} </template>
-                <span class="name text-hidden">{{ item.name }}</span>
-              </el-tooltip>
+
+                <div class="scroll-wrap">
+                  <div class="scroll-item ">
+                    <span class="name text-hidden">{{ item.name }}</span>
+                  </div>
+                </div>
             </div>
           </el-col>
         </el-row>
