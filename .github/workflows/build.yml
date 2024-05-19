@@ -37,7 +37,7 @@ jobs:
       # 步骤5：通过 SSH 确保目标路径存在
       - name: Ensure target directories exist
         run: |
-          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          ssh -o StrictHostKeyChecking=no -i ${{ secrets.SSH_PRIVATE_KEY }} ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
           mkdir -p /docker/nginx/html/home
           mkdir -p /docker/nginx/cert/home-cert
           mkdir -p /docker/nginx/conf.d
