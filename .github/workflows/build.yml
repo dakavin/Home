@@ -1,38 +1,84 @@
-# Dev 分支推送部署预览
-## 仅部署 Win 端
-name: Build Dev
+name: Deploy Home
 
+# 触发条件：当代码推送到 master 分支时触发工作流
 on:
   push:
     branches:
-      - dev
       - master
 
 jobs:
-  release:
-    name: Build Website
-    runs-on: windows-latest
+  deploy:
+    # 使用最新的 Ubuntu 作为运行环境
+    runs-on: ubuntu-latest
 
     steps:
-      # 检出 Git 仓库
-      - name: Check out git repository
-        uses: actions/checkout@v4.1.1
-      # 安装 Node.js
-      - name: Install Node.js
-        uses: actions/setup-node@v4.0.0
+      # 步骤1：检出代码
+      - name: Checkout code
+        uses: actions/checkout@v2
+        # 这是一个 GitHub 官方的动作，用于检出仓库代码到 runner 环境
+
+      # 步骤2：设置 Node.js 环境
+      - name: Setup Node.js
+        uses: actions/setup-node@v2
         with:
-          node-version: "18.x"
-      # 安装项目依赖
-      - name: Install Dependencies
+          node-version: '20.12.0'
+          # 使用 actions/setup-node@v2 设置 Node.js 版本为 20.12.0
+
+      # 步骤3：安装依赖项
+      - name: Install dependencies
         run: npm install
-      # 构建程序
-      - name: Build Website
+        # 运行 npm install 安装项目的所有依赖项
+
+      # 步骤4：构建项目
+      - name: Build project
         run: npm run build
-        env:
-          GITHUB_TOKEN: ${{ secrets.ACCESS_TOKEN }}
-      # 上传构建产物
-      - name: Upload artifacts
-        uses: actions/upload-artifact@v3.1.3
+        # 运行 npm run build 构建项目，将生成的文件放入 dist 文件夹
+
+      # 步骤5：通过 SSH 确保目标路径存在
+      - name: Ensure target directories exist
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          mkdir -p /docker/nginx/html/home
+          mkdir -p /docker/nginx/cert/home-cert
+          mkdir -p /docker/nginx/conf.d
+          EOF
+        # 通过 SSH 连接到服务器并创建必要的文件夹路径
+        # 如果目录已经存在也不会报错
+
+      # 步骤6：通过 SSH 复制 dist 文件夹内容到服务器
+      - name: Copy dist files via SSH
+        uses: appleboy/scp-action@v0.1.1
         with:
-          name: Home
-          path: dist
+          host: ${{ secrets.SSH_HOST }} # SSH_HOST secret 用于指定服务器的 IP 地址或域名
+          username: ${{ secrets.SSH_USER }} # SSH_USER secret 用于指定 SSH 用户名
+          key: ${{ secrets.SSH_PRIVATE_KEY }} # PRIVATE_KEY secret 用于指定 SSH 私钥
+          source: "dist/*" # 要复制的源文件或文件夹
+          target: "/docker/nginx/html/home" # 目标路径
+
+      # 步骤7：通过 SSH 复制 SSL 证书到服务器
+      - name: Copy SSL certs via SSH
+        uses: appleboy/scp-action@v0.1.1
+        with:
+          host: ${{ secrets.SSH_HOST }} # SSH_HOST secret 用于指定服务器的 IP 地址或域名
+          username: ${{ secrets.SSH_USER }} # SSH_USER secret 用于指定 SSH 用户名
+          key: ${{ secrets.SSH_PRIVATE_KEY }} # PRIVATE_KEY secret 用于指定 SSH 私钥
+          source: "nginx/config.d/home-cert/*" # 要复制的源文件或文件夹
+          target: "/docker/nginx/cert/home-cert" # 目标路径
+
+      # 步骤8：通过 SSH 复制 Nginx 配置文件到服务器
+      - name: Copy Nginx config via SSH
+        uses: appleboy/scp-action@v0.1.1
+        with:
+          host: ${{ secrets.SSH_HOST }} # SSH_HOST secret 用于指定服务器的 IP 地址或域名
+          username: ${{ secrets.SSH_USER }} # SSH_USER secret 用于指定 SSH 用户名
+          key: ${{ secrets.SSH_PRIVATE_KEY }} # PRIVATE_KEY secret 用于指定 SSH 私钥
+          source: "nginx/config.d/home.conf" # 要复制的源文件或文件夹
+          target: "/docker/nginx/conf.d" # 目标路径
+
+      # 步骤9：重启 Nginx 容器
+      - name: Restart Nginx container
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} << 'EOF'
+          docker restart nginx
+          EOF
+        # 通过 SSH 连接到服务器，并执行命令重启 Nginx 容器
