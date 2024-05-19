@@ -22,3 +22,5 @@ EXPOSE 80 443
 
 # 使用 exec 格式启动 Nginx 以优化接收 UNIX 信号
 CMD ["nginx", "-g", "daemon off;"]
+
+# 测试
