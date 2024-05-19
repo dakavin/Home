@@ -70,9 +70,9 @@ pnpm build
 
 ```bash
 # 构建
-docker build -t home .
+nginx build -t home .
 # 运行
-docker run -p 12445:12445 -d home
+nginx run -p 12445:12445 -d home
 ```
 
 ### 网站链接
