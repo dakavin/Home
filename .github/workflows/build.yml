@@ -53,7 +53,7 @@ jobs:
 
             # 步骤7：通过 SSH 复制 dist 文件夹内容到服务器
             - name: Copy dist files via SSH
-              uses: appleboy/scp-action@v0.1.1
+              uses: appleboy/rsync-action@master
               with:
                   host: ${{ secrets.SSH_HOST }}
                   username: ${{ secrets.SSH_USER }}
@@ -63,7 +63,7 @@ jobs:
 
             # 步骤8：通过 SSH 复制 SSL 证书到服务器
             - name: Copy SSL certs via SSH
-              uses: appleboy/scp-action@v0.1.1
+              uses: appleboy/rsync-action@master
               with:
                   host: ${{ secrets.SSH_HOST }}
                   username: ${{ secrets.SSH_USER }}
@@ -73,7 +73,7 @@ jobs:
 
             # 步骤9：通过 SSH 复制 Nginx 配置文件到服务器
             - name: Copy Nginx config via SSH
-              uses: appleboy/scp-action@v0.1.1
+              uses: appleboy/rsync-action@master
               with:
                   host: ${{ secrets.SSH_HOST }}
                   username: ${{ secrets.SSH_USER }}
