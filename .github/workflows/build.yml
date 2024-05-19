@@ -59,7 +59,7 @@ jobs:
                   username: ${{ secrets.SSH_USER }}
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   source: "dist/*"
-                  strip_components: 1
+                  strip_components: 1 # 确保不会在目标路径中创建额外的目录层级。
                   target: "/docker/nginx/html/home/"
 
             # 步骤8：通过 SSH 复制 SSL 证书到服务器
@@ -70,7 +70,7 @@ jobs:
                   username: ${{ secrets.SSH_USER }}
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   source: "nginx/config.d/home-cert/*"
-                  strip_components: 1
+                  strip_components: 3
                   target: "/docker/nginx/cert/home-cert/"
 
             # 步骤9：通过 SSH 复制 Nginx 配置文件到服务器
@@ -81,7 +81,7 @@ jobs:
                   username: ${{ secrets.SSH_USER }}
                   key: ${{ secrets.SSH_PRIVATE_KEY }}
                   source: "nginx/config.d/home.conf"
-                  strip_components: 1
+                  strip_components: 2
                   target: "/docker/nginx/conf.d/"
 
             # 步骤10：重启 Nginx 容器
