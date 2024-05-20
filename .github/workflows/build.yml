@@ -41,7 +41,7 @@ jobs:
             # 步骤4：构建项目
             # 运行 npm run build 构建项目，将生成的文件放入 dist 文件夹
             - name: Build project
-              run: npm run build -- --mode production --profile --json > build-stats.json
+              run: npm run vite build
 
             # 步骤5：设置 SSH Key
             - name: Setup SSH Key
